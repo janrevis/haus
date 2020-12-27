@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
+const comments = require('../controllers/commenting');
 
-router.get('/', (req, res) => {
-  res.send([]);
-});
+router.get('/comment', comments.getComments);
 
-router.post('/', (req, res) => {
-  res.send({ id: 'foo' })
-})
+router.post('/comment', comments.addComment);
+
+router.post('/register', comments.registerUser);
+router.post('/login', comments.login);
 
 module.exports = router;

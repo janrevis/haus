@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "concurrently \"nodemon index.js\" \"npx webpack --mode=development --watch\"",
+    "dev": "concurrently \"docker-compose up\" \"nodemon index.js\" \"npx webpack --mode=development --watch\"",
     "start": "node index.js",
     "server": " nodemon index.js",
     "heroku-postbuild": "npx webpack --mode=production"
@@ -21,8 +21,10 @@
   },
   "homepage": "https://github.com/janrevis/haus#readme",
   "dependencies": {
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
+    "express-session": "^1.17.1",
     "pg": "^8.5.1",
     "sequelize": "^6.3.5",
     "sequelize-cli": "^6.2.0"
