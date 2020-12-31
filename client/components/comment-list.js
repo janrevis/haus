@@ -60,7 +60,7 @@ class CommentList extends React.Component {
     const comments = this.state.comments.map(c => {
       let lines = c.comment.split('\n');
       lines = lines.map((l, idx) => {
-        return <span key={idx}>{l}<br /></span>;
+        return <p key={idx}>{l}</p>;
       });
       const submitted = new Date(c.createdAt);
       const hours = submitted.getHours().toString().padStart(2, "0");

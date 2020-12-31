@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "concurrently \"docker-compose up\" \"nodemon index.js\" \"npx webpack --mode=development --watch\"",
-    "start": "node index.js",
-    "server": " nodemon index.js",
+    "dev": "concurrently \"docker-compose up\" \"nodemon --watch server server/index.js\" \"npx webpack --mode=development --watch\"",
+    "start": "node server/index.js",
+    "server": " nodemon server/index.js",
     "heroku-postbuild": "npx webpack --mode=production"
   },
   "repository": {
