@@ -1,12 +1,16 @@
-const Comment = require('../models/comment');
-const User = require('../models/user');
 const bcrypt = require('bcrypt');
-const db = require("../models")
+const db = require("../models");
+
+const LOGIN_ERR_MESSAGE = "A match for the provided email and password could not be found";
+
 const commenting = {
 
   async getComments(req, resp) {
-    const comments = await db.sequelize.models.Comment.findAll();
-    resp.send(comments);
+    let comments = await db.sequelize.models.Comment.findAll({
+      where: { UserId: req.session.userId },
+      order: [ ['createdAt', 'DESC'] ]
+    });
+    resp.status(200).send(comments);
   },
 
   async addComment(req, resp) {
@@ -25,12 +29,12 @@ const commenting = {
 
   async registerUser(req, resp) {
     const email = req.body.email;
-    if (await User.findOne({ where: { email }})) {
-      resp.status(400).send(`User with email ${em} already registered`);
+    if (await db.sequelize.models.User.findOne({ where: { email }})) {
+      resp.status(400).send({ message: `User with email ${email} already registered` });
       return;
     }
     const password = await bcrypt.hash(req.body.password, 10);
-    await User.create({
+    await db.sequelize.models.User.create({
         email,
         password
     });
@@ -42,16 +46,14 @@ const commenting = {
     const password = req.body.password;
     const user = await db.sequelize.models.User.findOne({ where: { email }});
     if (!user) {
-      resp.status(403).send("Your email or password was not found");
-      return;
+      resp.status(403).send({ message: LOGIN_ERR_MESSAGE });
+    } else if (!await bcrypt.compare(password, user.password)) {
+      resp.status(403).send({ message: LOGIN_ERR_MESSAGE });
+    } else {
+      const session = req.session;
+      session.userId = user.id;
+      resp.status(200).send("");
     }
-    if (!await bcrypt.compare(password, user.password)) {
-      resp.status(403).send("Your email or password was not found");
-      return;
-    }
-    const session = req.session;
-    session.userId = user.id;
-    resp.status(201).send();
   }
 }
 

@@ -1,7 +1,8 @@
 
 module.exports = (req, resp, next) => {
-  if (!req.session.email) {
-    resp.status(403).send('not authenticated')
+  if (!req.session.userId) {
+    resp.status(403).send('not authenticated');
+    return;
   }
   next();
 }

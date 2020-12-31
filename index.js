@@ -10,7 +10,11 @@ const port = process.env.PORT || 4000;
 
 app.use(session({secret: 'cjkdoshjkl7fwer'}));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/api', routes);
+app.get('/*.html', (req, resp) => {
+  resp.sendFile(path.join(__dirname, './public/index.html'))
+})
 app.use(express.static('./public'));
 
 app.listen(port, () => {
