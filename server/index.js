@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const crypto = require('crypto');
 
+const errorHandler = require('./middleware/error-handler');
 const app = express();
 const routes = require('./routes');
 const port = process.env.PORT || 4000;
@@ -16,7 +17,7 @@ app.get('/*.html', (req, resp) => {
   resp.sendFile(path.join(__dirname, './public/index.html'))
 })
 app.use(express.static('./public'));
-
+app.use(errorHandler);
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 });
